@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>提交紀錄</title>
+</head>
+<body>
+    <h1>📜 我的提交紀錄</h1>
+    <p>
+        👤 登入帳號：<span id="currentUser"></span>
+        <button onclick="logout()">🔓 登出</button>
+    </p>
+    <ul id="submissionList"></ul>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.username) {
+            alert("請先登入！");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("currentUser").innerText = user.username;
+
+        function logout() {
+            localStorage.removeItem("user");
+            alert("你已登出！");
+            window.location.href = "login.html";
+        }
+
+        async function loadSubmissions() {
+            const res = await fetch(`http://localhost:3000/api/submissions/${user._id}`);
+            const submissions = await res.json();
+
+            const list = document.getElementById("submissionList");
+            submissions.forEach(sub => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    🧩 題目：<strong>${sub.problemTitle}</strong><br>
+                    🕒 時間：${new Date(sub.submittedAt).toLocaleString()}<br>
+                    ✅ 結果：${sub.passedAll ? "全部通過 ✔️" : "未通過 ❌"}<br>
+                    💻 程式碼：<pre>${sub.code}</pre><hr>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        loadSubmissions();
+    </script>
+</body>
+</html>
