@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登入</title>
+</head>
+<body>
+    <h1>🔐 登入</h1>
+    <form id="loginForm">
+        <label>帳號：<input type="text" id="username" required></label><br>
+        <label>密碼：<input type="password" id="password" required></label><br><br>
+        <button type="submit">登入</button>
+    </form>
+    <p id="message"></p>
+    <p>還沒註冊？<a href="register.html">點此註冊</a></p>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const res = await fetch("http://localhost:3000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (res.ok) {
+                const user = await res.json();
+                localStorage.setItem("user", JSON.stringify(user));
+                window.location.href = "problems.html";
+            } else {
+                document.getElementById("message").innerText = "❌ 登入失敗，請檢查帳號密碼";
+            }
+        });
+    </script>
+</body>
+</html>

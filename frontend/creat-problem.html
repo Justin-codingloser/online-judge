@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>新增題目</title>
+</head>
+<body>
+    <h1>🛠️ 新增題目</h1>
+    <p>
+        👤 目前登入帳號：<span id="currentUser">（尚未登入）</span>
+        <button onclick="logout()">🔓 登出</button>
+    </p>
+
+    <div id="adminOnly">
+        <form id="problemForm">
+            <label>標題：<br><input type="text" id="title" required></label><br><br>
+            <label>描述：<br><textarea id="description" rows="5" cols="60"></textarea></label><br><br>
+            <label>輸入說明：<br><input type="text" id="input" required></label><br><br>
+            <label>輸出說明：<br><input type="text" id="output" required></label><br><br>
+            <label>範例輸入：<br><textarea id="sampleInput" rows="2" cols="60"></textarea></label><br><br>
+            <label>範例輸出：<br><textarea id="sampleOutput" rows="2" cols="60"></textarea></label><br><br>
+            <label>測資（JSON 格式）：<br>
+                <textarea id="testcases" rows="6" cols="60">[{"input":"1 2","output":"3"},{"input":"3 4","output":"7"}]</textarea>
+            </label><br><br>
+
+            <button type="submit">📤 上傳題目</button>
+        </form>
+    </div>
+
+    <p id="message"></p>
+
+    <hr>
+    <h2>📘 題目清單</h2>
+    <ul id="problemList"></ul>
+
+    <script>
+        // ✅ 登入驗證
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.username) {
+            alert("請先登入！");
+            window.location.href = "login.html";
+        }
+        document.getElementById("currentUser").innerText = user.username;
+
+        // ✅ 權限檢查
+        if (!user.isAdmin) {
+            document.getElementById("adminOnly").style.display = "none";
+            document.getElementById("message").innerText = "⚠️ 你沒有出題權限，只能瀏覽題目";
+        }
+
+        // ✅ 登出功能
+        function logout() {
+            localStorage.removeItem("user");
+            alert("你已登出！");
+            window.location.href = "login.html";
+        }
+
+        // ✅ 題目上傳
+        document.getElementById("problemForm")?.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const problem = {
+                title: document.getElementById("title").value,
+                description: document.getElementById("description").value,
+                input: document.getElementById("input").value,
+                output: document.getElementById("output").value,
+                sampleInput: document.getElementById("sampleInput").value,
+                sampleOutput: document.getElementById("sampleOutput").value,
+                testcases: JSON.parse(document.getElementById("testcases").value),
+                createdBy: user._id
+            };
+
+            const res = await fetch("http://localhost:3000/api/problems/create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(problem)
+            });
+
+            if (res.ok) {
+                document.getElementById("message").innerText = "✅ 題目新增成功！";
+                document.getElementById("problemForm").reset();
+                loadProblems(); // 更新列表
+            } else {
+                const err = await res.text();
+                document.getElementById("message").innerText = "❌ 發生錯誤：" + err;
+            }
+        });
+
+        // ✅ 顯示目前所有題目
+        async function loadProblems() {
+            const res = await fetch("http://localhost:3000/api/problems/list");
+            const problems = await res.json();
+
+            const list = document.getElementById("problemList");
+            list.innerHTML = ""; // 清空
+            problems.forEach(p => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = `submit.html?id=${p._id}`;
+                a.innerText = p.title;
+                li.appendChild(a);
+                list.appendChild(li);
+            });
+        }
+
+        loadProblems();
+    </script>
+</body>
+</html>

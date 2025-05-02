@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>題目管理</title>
+</head>
+<body>
+    <h1>🧠 題目管理</h1>
+    <p>
+        👤 登入帳號：<span id="currentUser">（尚未登入）</span>
+        <button onclick="logout()">🔓 登出</button>
+    </p>
+
+    <ul id="problemList"></ul>
+
+    <script>
+        // ✅ 登入檢查
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.username) {
+            alert("請先登入！");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById("currentUser").innerText = user.username;
+
+        function logout() {
+            localStorage.removeItem("user");
+            alert("你已登出！");
+            window.location.href = "login.html";
+        }
+
+        // ✅ 載入題目 + 加上刪除/編輯按鈕
+        async function loadProblems() {
+            const res = await fetch("http://localhost:3000/api/problems/list");
+            const problems = await res.json();
+
+            const list = document.getElementById("problemList");
+            list.innerHTML = "";
+
+            problems.forEach(p => {
+                const li = document.createElement("li");
+
+                const link = document.createElement("a");
+                link.href = `submit.html?id=${p._id}`;
+                link.innerText = p.title;
+                li.appendChild(link);
+
+                // 只有 admin 能看到按鈕
+                if (user.isAdmin) {
+                    const editBtn = document.createElement("button");
+                    editBtn.innerText = "✏️ 編輯";
+                    editBtn.onclick = () => window.location.href = `edit-problem.html?id=${p._id}`;
+
+                    const deleteBtn = document.createElement("button");
+                    deleteBtn.innerText = "🗑️ 刪除";
+                    deleteBtn.onclick = async () => {
+                        if (confirm("確定要刪除這題嗎？")) {
+                            const delRes = await fetch(`http://localhost:3000/api/problems/${p._id}`, {
+                                method: "DELETE"
+                            });
+                            if (delRes.ok) {
+                                alert("✅ 已刪除");
+                                loadProblems();
+                            } else {
+                                alert("❌ 刪除失敗");
+                            }
+                        }
+                    };
+
+                    li.appendChild(document.createTextNode(" "));
+                    li.appendChild(editBtn);
+                    li.appendChild(deleteBtn);
+                }
+
+                list.appendChild(li);
+            });
+        }
+
+        loadProblems();
+    </script>
+</body>
+</html>

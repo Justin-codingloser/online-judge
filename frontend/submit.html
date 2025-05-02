@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>提交程式碼</title>
+</head>
+<body>
+    <p>
+        👤 目前登入帳號：<span id="currentUser">（尚未登入）</span>
+        <button onclick="logout()">🔓 登出</button>
+    </p>
+
+    <h1>題目：<span id="problemTitle"></span></h1>
+    <pre id="description"></pre>
+    <pre><strong>輸入說明：</strong> <span id="inputDesc"></span></pre>
+    <pre><strong>輸出說明：</strong> <span id="outputDesc"></span></pre>
+    <pre><strong>範例輸入：</strong> <span id="sampleInput"></span></pre>
+    <pre><strong>範例輸出：</strong> <span id="sampleOutput"></span></pre>
+
+    <h3>請輸入你的 JavaScript 程式碼：</h3>
+    <textarea id="code" cols="80" rows="10">
+
+    </textarea><br><br>
+
+    <button onclick="submitCode()">🚀 提交</button>
+
+    <h3>📊 判題結果：</h3>
+    <pre id="result"></pre>
+
+    <script>
+        // ✅ 登入驗證（放最前面，防止未登入）
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.username) {
+            alert("請先登入！");
+            window.location.href = "login.html";
+        }
+
+        // ✅ 顯示使用者帳號
+        document.getElementById("currentUser").innerText = user.username;
+
+        // ✅ 登出功能
+        function logout() {
+            localStorage.removeItem("user");
+            alert("你已登出！");
+            window.location.href = "login.html";
+        }
+
+        // 題目載入
+        const urlParams = new URLSearchParams(window.location.search);
+        const problemId = urlParams.get("id");
+
+        async function loadProblem() {
+            const res = await fetch(`http://localhost:3000/api/problems/${problemId}`);
+            const problem = await res.json();
+
+            document.getElementById("problemTitle").innerText = problem.title;
+            document.getElementById("description").innerText = problem.description;
+            document.getElementById("inputDesc").innerText = problem.input;
+            document.getElementById("outputDesc").innerText = problem.output;
+            document.getElementById("sampleInput").innerText = problem.sampleInput;
+            document.getElementById("sampleOutput").innerText = problem.sampleOutput;
+        }
+
+        async function submitCode() {
+            const code = document.getElementById("code").value;
+            const user = JSON.parse(localStorage.getItem("user"));
+            const res = await fetch(`http://localhost:3000/api/submit/${problemId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code, userId: user._id, username: user.username })
+            });
+
+            const data = await res.json();
+
+            if (data.results) {
+                let output = `✅ 全部通過：${data.passedAll}\n\n`;
+                data.results.forEach((r, i) => {
+                    output += `# 測資 ${i + 1}\n`;
+                    output += `輸入：${r.input}\n預期輸出：${r.expectedOutput}\n你的輸出：${r.userOutput}\n結果：${r.passed ? "✔️ 通過" : "❌ 錯誤"}\n\n`;
+                });
+                document.getElementById("result").innerText = output;
+            } else {
+                document.getElementById("result").innerText = "❌ 提交失敗";
+            }
+        }
+
+        loadProblem();
+    </script>
+</body>
+</html>
+
