@@ -38,6 +38,10 @@ app.get("/api/hello", (req, res) => {
     res.send("👋 Hello from backend");
 });
 
+app.get("/", (req, res) => {
+    res.redirect("/login.html");
+  });
+
 // 啟動伺服器
 app.listen(PORT, () => {
     console.log(`🚀 伺服器啟動中：http://localhost:${PORT}`);
