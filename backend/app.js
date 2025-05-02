@@ -14,14 +14,19 @@ const PORT = process.env.PORT || 3000; // 🚀 支援 Render 的自動 PORT
 // Middlewares
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "../frontend")));
 app.use("/api/auth", authRoutes);
 app.use("/api/problems", problemRoutes);
 app.use("/api/submit", submitRoutes);
 app.use("/api/submissions", submissionRoutes);
-app.use(express.static(path.join(__dirname, "../frontend")));
 
 // ✅ MongoDB 連接（改為讀取環境變數）
-const mongoURL = process.env.MONGO_URL;
+const mongoURL = process.env.MONGO_URL; // 確保環境變數中包含完整的 MongoDB 連接字串
+if (!mongoURL) {
+    console.error("❌ 環境變數 MONGO_URL 未設定");
+    process.exit(1); // 終止程式
+}
+
 mongoose.connect(mongoURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
