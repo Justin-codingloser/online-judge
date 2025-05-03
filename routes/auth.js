@@ -29,6 +29,7 @@ router.post("/login", async (req, res) => {
             success: true,
             message: "✅ 登入成功（模擬 token）",
             token: "mock-token", // 如果你未來要加 JWT，可以放這裡
+            username: user.username // 回傳 username
         });
     } catch (err) {
         res.status(500).send("❌ 登入錯誤");
