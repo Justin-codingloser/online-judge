@@ -64,7 +64,7 @@
         async function submitCode() {
             const code = document.getElementById("code").value;
             const user = JSON.parse(localStorage.getItem("user"));
-            const res = await fetch(`http://localhost:3000/api/submit/${problemId}`, {
+            const res = await fetch(`https://online-judge-ospk.onrender.com/api/submit/${problemId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code, userId: user._id, username: user.username })

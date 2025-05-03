@@ -28,7 +28,7 @@
         }
 
         async function loadSubmissions() {
-            const res = await fetch(`http://localhost:3000/api/submissions/${user._id}`);
+            const res = await fetch(`https://online-judge-ospk.onrender.com/api/submissions/${user._id}`);
             const submissions = await res.json();
 
             const list = document.getElementById("submissionList");

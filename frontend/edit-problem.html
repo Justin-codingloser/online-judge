@@ -73,7 +73,7 @@
                 testcases: JSON.parse(document.getElementById("testcases").value)
             };
 
-            const res = await fetch(`http://localhost:3000/api/problems/${problemId}`, {
+            const res = await fetch(`https://online-judge-ospk.onrender.com/api/problems/${problemId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updated)

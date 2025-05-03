@@ -55,7 +55,7 @@
                     deleteBtn.innerText = "🗑️ 刪除";
                     deleteBtn.onclick = async () => {
                         if (confirm("確定要刪除這題嗎？")) {
-                            const delRes = await fetch(`http://localhost:3000/api/problems/${p._id}`, {
+                            const delRes = await fetch(`https://online-judge-ospk.onrender.com/api/problems/${p._id}`, {
                                 method: "DELETE"
                             });
                             if (delRes.ok) {
