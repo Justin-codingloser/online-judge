@@ -25,7 +25,11 @@ router.post("/login", async (req, res) => {
         if (!user || user.password !== password) {
             return res.status(401).send("❌ 帳號或密碼錯誤");
         }
-        res.send("✅ 登入成功（模擬 token）");
+        res.json({
+            success: true,
+            message: "✅ 登入成功（模擬 token）",
+            token: "mock-token", // 如果你未來要加 JWT，可以放這裡
+        });
     } catch (err) {
         res.status(500).send("❌ 登入錯誤");
     }
