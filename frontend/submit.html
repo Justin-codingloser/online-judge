@@ -50,7 +50,7 @@
         const problemId = urlParams.get("id");
 
         async function loadProblem() {
-            const res = await fetch(`http://localhost:3000/api/problems/${problemId}`);
+            const res = await fetch(`https://online-judge-ospk.onrender.com/api/problems/${problemId}`);
             const problem = await res.json();
 
             document.getElementById("problemTitle").innerText = problem.title;
