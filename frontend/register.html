@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>註冊帳號</title>
+    <title>註冊 | Online Judge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>📝 註冊</h1>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen text-gray-800">
 
-    <form id="registerForm">
-        <label>帳號：<input type="text" id="username" required></label><br>
-        <label>密碼：<input type="password" id="password" required></label><br><br>
-        <button type="submit">註冊</button>
-    </form>
-
-    <p id="message"></p>
-    <p>已有帳號？<a href="login.html">點此登入</a></p>
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">📝 註冊帳號</h1>
+        <form id="registerForm" class="space-y-4">
+            <div>
+                <label class="block mb-1 font-medium">帳號</label>
+                <input type="text" id="username" required class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400">
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">密碼</label>
+                <input type="password" id="password" required class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400">
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                註冊
+            </button>
+        </form>
+        <p id="message" class="mt-4 text-center text-sm"></p>
+    </div>
 
     <script>
-        document.getElementById("registerForm").addEventListener("submit", async function (e) {
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
             e.preventDefault();
 
             const username = document.getElementById("username").value;
@@ -25,24 +34,27 @@
 
             const res = await fetch("https://online-judge-ospk.onrender.com/api/auth/register", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
             });
 
-            const message = document.getElementById("message");
+            const result = await res.json();
+            const msg = document.getElementById("message");
 
             if (res.ok) {
-                message.innerText = "✅ 註冊成功，2 秒後將跳轉到登入頁面...";
-                message.style.color = "green";
+                msg.textContent = "✅ 註冊成功！3 秒後自動跳轉至登入頁面...";
+                msg.className = "mt-4 text-center text-green-600 text-sm";
                 setTimeout(() => {
                     window.location.href = "login.html";
-                }, 2000);
+                }, 3000);
             } else {
-                const errText = await res.text();
-                message.innerText = "❌ 註冊失敗：" + errText;
-                message.style.color = "red";
+                msg.textContent = "❌ " + (result.error || "註冊失敗，請稍後再試！");
+                msg.className = "mt-4 text-center text-red-600 text-sm";
             }
         });
     </script>
+
 </body>
 </html>
