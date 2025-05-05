@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>題目總覽</title>
+    <title>題目總覽 | Online Judge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <p>
-        👤 目前登入帳號：<span id="currentUser">（尚未登入）</span>
-        <button onclick="logout()">🔓 登出</button>
-    </p>
+<body class="bg-gray-50 text-gray-800">
 
-    <h1>📘 題目列表</h1>
-    <ul id="problemList"></ul>
+    <!-- 導覽列 -->
+    <nav class="bg-blue-600 text-white px-6 py-3 flex justify-between items-center shadow-md">
+        <div class="text-xl font-bold">
+            <a href="problems.html" class="hover:underline">🏁 Online Judge</a>
+        </div>
+        <div class="space-x-4">
+            <a href="problems.html" class="hover:underline">題目總覽</a>
+            <a href="contest.html" class="hover:underline">比賽</a>
+            <a href="users.html" class="hover:underline">用戶</a>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="currentUser" class="font-medium">（尚未登入）</span>
+            <button onclick="logout()" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100">登出</button>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="max-w-4xl mx-auto mt-10 px-4">
+        <h1 class="text-2xl font-bold mb-4">📘 題目列表</h1>
+        <ul id="problemList" class="space-y-3"></ul>
+    </main>
 
     <script>
-        // ✅ 登入驗證（未登入導回 login）
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user || !user.username) {
-            alert("請先登入！");
-            window.location.href = "login.html";
-        }
-
-        // ✅ 顯示登入帳號
-        document.getElementById("currentUser").innerText = user.username;
-
-        // ✅ 登出功能
-        function logout() {
-            localStorage.removeItem("user");
-            alert("你已登出！");
-            window.location.href = "login.html";
-        }
-
-        // 顯示題目清單
         async function loadProblems() {
             const res = await fetch("https://online-judge-ospk.onrender.com/api/problems/list");
             const problems = await res.json();
@@ -39,15 +37,32 @@
             const list = document.getElementById("problemList");
             problems.forEach(p => {
                 const li = document.createElement("li");
+                li.className = "bg-white rounded shadow p-4 hover:bg-blue-50";
+
                 const a = document.createElement("a");
                 a.href = `submit.html?id=${p._id}`;
                 a.innerText = p.title;
+                a.className = "text-blue-600 font-semibold hover:underline";
+
                 li.appendChild(a);
                 list.appendChild(li);
             });
         }
 
         loadProblems();
+
+        // 顯示登入使用者名稱
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user && user.username) {
+            document.getElementById("currentUser").innerText = user.username;
+        }
+
+        function logout() {
+            localStorage.removeItem("user");
+            alert("你已登出！");
+            window.location.href = "login.html";
+        }
     </script>
+
 </body>
 </html>
