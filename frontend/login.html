@@ -1,25 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>登入</title>
+    <title>登入 - Online Judge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>🔐 登入</h1>
-    <form id="loginForm">
-        <label>帳號：<input type="text" id="username" required></label><br>
-        <label>密碼：<input type="password" id="password" required></label><br><br>
-        <button type="submit">登入</button>
-    </form>
-    <p id="message"></p>
-    <p>還沒註冊？<a href="register.html">點此註冊</a></p>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+
+    <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-blue-600 mb-6">🔐login🔐</h1>
+
+        <div class="space-y-4">
+            <input type="text" id="username" placeholder="使用者名稱" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input type="password" id="password" placeholder="密碼" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <button onclick="login()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition duration-200">登入</button>
+        </div>
+
+        <p id="message" class="text-center text-red-500 mt-4"></p>
+
+        <p class="text-center text-sm mt-6">
+            還沒有帳號？
+            <a href="register.html" class="text-blue-500 hover:underline">點我註冊</a>
+        </p>
+    </div>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+        async function login() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
 
             const res = await fetch("https://online-judge-ospk.onrender.com/api/auth/login", {
                 method: "POST",
@@ -27,14 +35,16 @@
                 body: JSON.stringify({ username, password })
             });
 
-            if (res.ok) {
-                const user = await res.json();
-                localStorage.setItem("user", JSON.stringify(user));
-                window.location.href = "problems.html";
+            const data = await res.json();
+            const msg = document.getElementById("message");
+
+            if (res.ok && data.token) {
+                localStorage.setItem("user", JSON.stringify(data));
+                window.location.href = "problems.html";  // 如果在 GitHub Pages 要改網址
             } else {
-                document.getElementById("message").innerText = "❌ 登入失敗，請檢查帳號密碼";
+                msg.innerText = data.message || "登入失敗";
             }
-        });
+        }
     </script>
 </body>
 </html>
