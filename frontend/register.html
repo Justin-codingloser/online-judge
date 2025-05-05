@@ -46,17 +46,27 @@
                 body: JSON.stringify({ username, password }),
             });
 
-            const result = await res.json();
             const msg = document.getElementById("message");
 
-            if (res.ok) {
-                msg.textContent = "✅ 註冊成功！3 秒後自動跳轉至登入頁面...";
-                msg.className = "mt-4 text-center text-green-600 text-sm";
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 3000);
-            } else {
-                msg.textContent = "❌ " + (result.error || "註冊失敗，請稍後再試！");
+            try {
+                // 確保只有 JSON 格式的回應才解析
+                const result = res.headers.get("Content-Type")?.includes("application/json")
+                    ? await res.json()
+                    : null;
+
+                if (res.ok) {
+                    msg.textContent = "✅ 註冊成功！3 秒後自動跳轉至登入頁面...";
+                    msg.className = "mt-4 text-center text-green-600 text-sm";
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 3000);
+                } else {
+                    msg.textContent = "❌ " + (result?.error || "註冊失敗，請稍後再試！");
+                    msg.className = "mt-4 text-center text-red-600 text-sm";
+                }
+            } catch (error) {
+                console.error("解析回應時發生錯誤：", error);
+                msg.textContent = "❌ 註冊失敗，伺服器回應無效！";
                 msg.className = "mt-4 text-center text-red-600 text-sm";
             }
         });
