@@ -16,6 +16,7 @@
             <a href="problems.html" class="hover:underline">題目總覽</a>
             <a href="contest.html" class="hover:underline">比賽</a>
             <a href="users.html" class="hover:underline">用戶</a>
+            <a href="creat-problem.html" class="hover:underline" id="adminLink">出題</a>
         </div>
         <div class="flex items-center space-x-4">
             <span id="currentUser" class="font-medium">（尚未登入）</span>
@@ -55,6 +56,13 @@
         const user = JSON.parse(localStorage.getItem("user"));
         if (user && user.username) {
             document.getElementById("currentUser").innerText = user.username;
+            // 只有 admin 才顯示「出題」連結
+            if (!user.isAdmin) {
+                document.getElementById("adminLink").style.display = "none";
+            }
+        } else {
+            // 未登入也隱藏「出題」連結
+            document.getElementById("adminLink").style.display = "none";
         }
 
         function logout() {
