@@ -70,7 +70,7 @@
                 createdBy: user._id
             };
 
-            const res = await fetch("http://localhost:3000/api/problems/create", {
+            const res = await fetch("https://online-judge-ospk.onrender.com/api/problems/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(problem)
