@@ -43,7 +43,7 @@
         document.getElementById("currentUser").innerText = user.username;
 
         // ✅ 權限檢查
-        if (!user.isAdmin) {
+        if (user.isAdmin==0) {
             document.getElementById("adminOnly").style.display = "none";
             document.getElementById("message").innerText = "⚠️ 你沒有出題權限，只能瀏覽題目";
         }
