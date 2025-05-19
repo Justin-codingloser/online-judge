@@ -13,7 +13,7 @@ router.post("/:problemId", async (req, res) => {
 
     try {
         const problem = await Problem.findById(problemId);
-        if (!problem) return res.status(404).send("❌ 題目不存在");
+        if (!problem) return res.status(404).json({ error: "題目不存在" });
 
         let results = [];
         let passedAll = true;
@@ -96,7 +96,7 @@ process.stdin.on('data', function (data) {
 
     } catch (err) {
         console.error(err);
-        res.status(500).send("❌ 提交時出錯");
+        res.status(500).json({ error: "提交時出錯" });
     }
 });
 
