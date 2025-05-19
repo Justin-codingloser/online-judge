@@ -82,14 +82,14 @@
             const code = document.getElementById("code").value;
             const resultMsg = document.getElementById("resultMsg");
 
-            const res = await fetch("https://online-judge-ospk.onrender.com/api/submit", {
+            const res = await fetch(`https://online-judge-ospk.onrender.com/api/submit/${problemId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     userId: user._id,
-                    problemId,
+                    username: user.username,
                     code
                 })
             });
