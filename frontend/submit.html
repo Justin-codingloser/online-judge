@@ -94,7 +94,13 @@
                 })
             });
 
-            const result = await res.json();
+            let result;
+            try {
+                result = await res.json();
+            } catch {
+                result = {};
+            }
+
             if (res.ok) {
                 resultMsg.innerText = "✅ 提交成功！";
                 resultMsg.className = "text-green-600 text-center mt-2 text-sm";
