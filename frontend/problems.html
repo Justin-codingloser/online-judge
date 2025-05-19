@@ -57,7 +57,7 @@
         if (user && user.username) {
             document.getElementById("currentUser").innerText = user.username;
             // 只有 admin 才顯示「出題」連結
-            if (user.isAdmin==0) {
+            if (user.isAdmin!=true) {
                 document.getElementById("adminLink").style.display = "none";
             }
         } else {

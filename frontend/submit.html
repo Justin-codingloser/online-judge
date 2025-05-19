@@ -21,7 +21,14 @@
     <!-- 主區塊 -->
     <main class="max-w-3xl mx-auto p-6 bg-white mt-6 rounded shadow">
         <h1 class="text-2xl font-bold mb-4" id="problemTitle">📘 題目標題載入中...</h1>
-        <p id="problemDescription" class="mb-6 whitespace-pre-line text-gray-700">📄 題目內容載入中...</p>
+        <p id="problemDescription" class="mb-4 whitespace-pre-line text-gray-700">📄 題目內容載入中...</p>
+
+        <div class="mb-4">
+            <div><strong>輸入說明：</strong><span id="problemInput"></span></div>
+            <div><strong>輸出說明：</strong><span id="problemOutput"></span></div>
+            <div><strong>範例輸入：</strong><pre id="problemSampleInput" class="bg-gray-100 p-2 rounded"></pre></div>
+            <div><strong>範例輸出：</strong><pre id="problemSampleOutput" class="bg-gray-100 p-2 rounded"></pre></div>
+        </div>
 
         <form id="submitForm" class="space-y-4">
             <div>
@@ -53,6 +60,10 @@
             const data = await res.json();
             document.getElementById("problemTitle").innerText = data.title;
             document.getElementById("problemDescription").innerText = data.description;
+            document.getElementById("problemInput").innerText = data.input || "";
+            document.getElementById("problemOutput").innerText = data.output || "";
+            document.getElementById("problemSampleInput").innerText = data.sampleInput || "";
+            document.getElementById("problemSampleOutput").innerText = data.sampleOutput || "";
         }
 
         loadProblem();
