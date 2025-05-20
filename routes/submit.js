@@ -26,11 +26,7 @@ router.post("/:problemId", async (req, res) => {
             const filepath = path.join(__dirname, "..", "submissions", filename);
 
             // 使用者程式碼會寫在 process.stdin 裡面
-            const fullCode = `
-process.stdin.on('data', function (data) {
-    ${code}
-});
-            `;
+            const fullCode = code; // 直接寫入使用者 code
 
             fs.writeFileSync(filepath, fullCode);
 
@@ -44,17 +40,22 @@ process.stdin.on('data', function (data) {
             // 接收程式輸出
             const output = await new Promise((resolve, reject) => {
                 let result = "";
+                let error = "";
 
                 run.stdout.on("data", (data) => {
                     result += data;
                 });
 
                 run.stderr.on("data", (err) => {
-                    reject("執行錯誤：" + err.toString());
+                    error += err;
                 });
 
                 run.on("close", () => {
-                    resolve(result.trim());
+                    if (error) {
+                        reject("執行錯誤：" + error);
+                    } else {
+                        resolve(result.trim());
+                    }
                 });
             });
 
