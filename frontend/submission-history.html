@@ -8,7 +8,7 @@
 <body>
     <nav class="bg-blue-600 text-white px-6 py-3 flex justify-between items-center shadow-md">
         <div class="text-xl font-bold">
-            <a href="problems.html" class="hover:underline">🏁 Online Judge</a>
+            <a href="problems.html" class="hover:underline">C++ Only Online Judge</a>
         </div>
         <div class="space-x-4">
             <a href="problems.html" class="hover:underline">題目總覽</a>
@@ -58,10 +58,10 @@
                 submissions.forEach(sub => {
                     const li = document.createElement("li");
                     li.innerHTML = `
-                        🧩 題目：<strong>${sub.problemTitle}</strong><br>
-                        🕒 時間：${new Date(sub.submittedAt).toLocaleString()}<br>
-                        ✅ 結果：${sub.passedAll ? "全部通過 ✔️" : "未通過 ❌"}<br>
-                        💻 程式碼：<pre>${sub.code}</pre><hr>
+                        題目：<strong>${sub.problemTitle}</strong><br>
+                        時間：${new Date(sub.submittedAt).toLocaleString()}<br>
+                        結果：${sub.passedAll ? "全部通過" : "未通過"}<br>
+                        程式碼：<pre>${sub.code}</pre><hr>
                     `;
                     list.appendChild(li);
                 });

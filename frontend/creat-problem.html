@@ -8,7 +8,7 @@
     <h1>🛠️ 新增題目</h1>
     <p>
         👤 目前登入帳號：<span id="currentUser">（尚未登入）</span>
-        <button onclick="logout()">🔓 登出</button>
+        <button onclick="logout()">登出</button>
     </p>
 
     <div id="adminOnly">
@@ -37,7 +37,7 @@
         // ✅ 登入驗證
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.username) {
-            alert("請先登入！");
+            alert("請先登入");
             window.location.href = "login.html";
         }
         document.getElementById("currentUser").innerText = user.username;
@@ -51,7 +51,7 @@
         // ✅ 登出功能
         function logout() {
             localStorage.removeItem("user");
-            alert("你已登出！");
+            alert("您已登出");
             window.location.href = "login.html";
         }
 
@@ -77,12 +77,12 @@
             });
 
             if (res.ok) {
-                document.getElementById("message").innerText = "✅ 題目新增成功！";
+                document.getElementById("message").innerText = "題目新增成功！";
                 document.getElementById("problemForm").reset();
                 loadProblems(); // 更新列表
             } else {
                 const err = await res.text();
-                document.getElementById("message").innerText = "❌ 發生錯誤：" + err;
+                document.getElementById("message").innerText = "發生錯誤：" + err;
             }
         });
 

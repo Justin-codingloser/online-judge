@@ -10,7 +10,7 @@
     <!-- 導覽列 -->
     <nav class="bg-blue-600 text-white px-6 py-3 flex justify-between items-center shadow-md">
         <div class="text-xl font-bold">
-            <a href="problems.html" class="hover:underline">🏁 Online Judge</a>
+            <a href="problems.html" class="hover:underline">C++ Only Online Judge</a>
         </div>
         <div class="space-x-4">
             <a href="problems.html" class="hover:underline">題目總覽</a>
@@ -26,8 +26,8 @@
 
     <!-- 主區塊 -->
     <main class="max-w-3xl mx-auto p-6 bg-white mt-6 rounded shadow">
-        <h1 class="text-2xl font-bold mb-4" id="problemTitle">📘 題目標題載入中...</h1>
-        <p id="problemDescription" class="mb-4 whitespace-pre-line text-gray-700">📄 題目內容載入中...</p>
+        <h1 class="text-2xl font-bold mb-4" id="problemTitle">題目標題載入中...</h1>
+        <p id="problemDescription" class="mb-4 whitespace-pre-line text-gray-700">題目內容載入中...</p>
 
         <div class="mb-4">
             <div><strong>輸入說明：</strong><span id="problemInput"></span></div>
@@ -42,7 +42,7 @@
                 <textarea id="code" rows="10" required class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"></textarea>
             </div>
             <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
-                🚀 提交程式碼
+                提交程式碼
             </button>
             <p id="resultMsg" class="text-center mt-2 text-sm"></p>
         </form>
@@ -54,7 +54,7 @@
 
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.username) {
-            alert("請先登入！");
+            alert("請先登入");
             window.location.href = "login.html";
         }
 
@@ -84,7 +84,7 @@
         // 登出功能
         function logout() {
             localStorage.removeItem("user");
-            alert("你已登出！");
+            alert("您已登出");
             window.location.href = "login.html";
         }
 
@@ -115,11 +115,11 @@
             }
 
             if (res.ok) {
-                resultMsg.innerText = "✅ 提交成功！";
+                resultMsg.innerText = "提交成功！";
                 resultMsg.className = "text-green-600 text-center mt-2 text-sm";
                 window.location.href = "submission-history.html";
             } else {
-                resultMsg.innerText = "❌ 提交失敗：" + (result.error || "請再試一次");
+                resultMsg.innerText = "提交失敗：" + (result.error || "請再試一次");
                 resultMsg.className = "text-red-600 text-center mt-2 text-sm";
             }
         });
