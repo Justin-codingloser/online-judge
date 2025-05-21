@@ -40,7 +40,7 @@
 
             if (res.ok && data.token) {
                 localStorage.setItem("user", JSON.stringify(data));
-                window.location.href = "problems.html";  // 如果在 GitHub Pages 要改網址
+                window.location.href = "problems.html";
             } else {
                 msg.innerText = data.message || "登入失敗";
             }
