@@ -15,7 +15,8 @@
         <div class="space-x-4">
             <a href="problems.html" class="hover:underline">題目總覽</a>
             <a href="submission-history.html" class="hover:underline">紀錄</a>
-            <a href="creat-problem.html" class="hover:underline" id="adminLink">出題</a>
+            <a href="creat-problem.html" class="hover:underline" id="adminLink1">出題</a>
+            <a href="manage-problems.html" class="hover:underline" id="adminLink2">題目管理</a>
         </div>
         <div class="flex items-center space-x-4">
             <span id="currentUser" class="font-medium">（尚未登入）</span>
@@ -51,12 +52,19 @@
         const urlParams = new URLSearchParams(window.location.search);
         const problemId = urlParams.get("id");
 
-        // 顯示登入帳號
         const user = JSON.parse(localStorage.getItem("user"));
-        if (user && user.username) {
-            document.getElementById("currentUser").innerText = user.username;
-        } else {
-            document.getElementById("currentUser").innerText = "未登入";
+        if (!user || !user.username) {
+            alert("請先登入！");
+            window.location.href = "login.html";
+        }
+
+        // 顯示登入帳號
+        document.getElementById("currentUser").innerText = user.username;
+
+        // 只有 admin 才顯示「出題」連結
+        if (!user.isAdmin) {
+            document.getElementById("adminLink1").style.display = "none";
+            document.getElementById("adminLink2").style.display = "none";
         }
 
         // 題目資料載入

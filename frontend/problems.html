@@ -15,7 +15,8 @@
         <div class="space-x-4">
             <a href="problems.html" class="hover:underline">題目總覽</a>
             <a href="submission-history.html" class="hover:underline">紀錄</a>
-            <a href="creat-problem.html" class="hover:underline" id="adminLink">出題</a>
+            <a href="creat-problem.html" class="hover:underline" id="adminLink1">出題</a>
+            <a href="manage-problems.html" class="hover:underline" id="adminLink2">題目管理</a>
         </div>
         <div class="flex items-center space-x-4">
             <span id="currentUser" class="font-medium">（尚未登入）</span>
@@ -57,7 +58,8 @@
             document.getElementById("currentUser").innerText = user.username;
             // 只有 admin 才顯示「出題」連結
             if (user.isAdmin!=true) {
-                document.getElementById("adminLink").style.display = "none";
+                document.getElementById("adminLink1").style.display = "none";
+                document.getElementById("adminLink2").style.display = "none";
             }
         } else {
             // 未登入也隱藏「出題」連結
