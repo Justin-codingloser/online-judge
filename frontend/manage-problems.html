@@ -31,7 +31,7 @@
 
         // ✅ 載入題目 + 加上刪除/編輯按鈕
         async function loadProblems() {
-            const res = await fetch("http://localhost:3000/api/problems/list");
+            const res = await fetch("https://online-judge-ospk.onrender.com/api/problems/list");
             const problems = await res.json();
 
             const list = document.getElementById("problemList");

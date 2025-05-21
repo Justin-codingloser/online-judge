@@ -8,13 +8,8 @@ const { v4: uuidv4 } = require("uuid");
 
 // POST /api/submit/:problemId
 router.post("/:problemId", async (req, res) => {
-    const { code, language } = req.body; // 取得語言
+    const { code } = req.body; // 只需要程式碼
     const { problemId } = req.params;
-
-    // 只允許 python 和 cpp
-    if (!["python", "cpp"].includes(language)) {
-        return res.status(400).json({ error: "只允許提交 Python 或 C++ 程式碼" });
-    }
 
     try {
         const problem = await Problem.findById(problemId);
@@ -27,28 +22,23 @@ router.post("/:problemId", async (req, res) => {
             const input = testcase.input;
             const expectedOutput = testcase.output.trim();
 
-            // 根據語言決定副檔名與執行指令
-            let filename, filepath, run, compileProcess;
-            if (language === "python") {
-                filename = `code_${uuidv4()}.py`;
-                filepath = path.join(__dirname, "..", "submissions", filename);
-                fs.writeFileSync(filepath, code);
-                run = spawn("python", [filepath]);
-            } else if (language === "cpp") {
-                filename = `code_${uuidv4()}.cpp`;
-                filepath = path.join(__dirname, "..", "submissions", filename);
-                fs.writeFileSync(filepath, code);
-                // 編譯
-                const exePath = filepath.replace(".cpp", ".exe");
-                compileProcess = spawn("g++", [filepath, "-o", exePath]);
-                await new Promise((resolve, reject) => {
-                    compileProcess.on("close", (code) => {
-                        if (code !== 0) reject("C++ 編譯失敗");
-                        else resolve();
-                    });
+            // 處理 C++ 程式碼
+            const filename = `code_${uuidv4()}.cpp`;
+            const filepath = path.join(__dirname, "..", "submissions", filename);
+            fs.writeFileSync(filepath, code);
+
+            // 編譯
+            const exePath = filepath.replace(".cpp", ".exe");
+            const compileProcess = spawn("g++", [filepath, "-o", exePath]);
+            await new Promise((resolve, reject) => {
+                compileProcess.on("close", (code) => {
+                    if (code !== 0) reject("C++ 編譯失敗");
+                    else resolve();
                 });
-                run = spawn(exePath);
-            }
+            });
+
+            // 執行
+            const run = spawn(exePath);
 
             // 將測資 input 寫入 stdin
             run.stdin.write(input);
@@ -88,10 +78,7 @@ router.post("/:problemId", async (req, res) => {
 
             // 刪除暫存檔案
             fs.unlinkSync(filepath);
-            if (language === "cpp") {
-                const exePath = filepath.replace(".cpp", ".exe");
-                if (fs.existsSync(exePath)) fs.unlinkSync(exePath);
-            }
+            if (fs.existsSync(exePath)) fs.unlinkSync(exePath);
         }
 
         const Submission = require("../models/Submission");
