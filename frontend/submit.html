@@ -113,6 +113,7 @@
             if (res.ok) {
                 resultMsg.innerText = "✅ 提交成功！";
                 resultMsg.className = "text-green-600 text-center mt-2 text-sm";
+                window.location.href = "submission-history.html";
             } else {
                 resultMsg.innerText = "❌ 提交失敗：" + (result.error || "請再試一次");
                 resultMsg.className = "text-red-600 text-center mt-2 text-sm";
