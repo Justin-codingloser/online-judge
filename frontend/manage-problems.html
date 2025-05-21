@@ -10,6 +10,20 @@
         👤 登入帳號：<span id="currentUser">（尚未登入）</span>
         <button onclick="logout()">🔓 登出</button>
     </p>
+    <nav class="bg-blue-600 text-white px-6 py-3 flex justify-between items-center shadow-md">
+        <div class="text-xl font-bold">
+            <a href="problems.html" class="hover:underline">🏁 Online Judge</a>
+        </div>
+        <div class="space-x-4">
+            <a href="problems.html" class="hover:underline">題目總覽</a>
+            <a href="users.html" class="hover:underline">用戶</a>
+            <a href="submission-history.html" class="hover:underline">紀錄</a>
+            <a href="creat-problem.html" class="hover:underline" id="adminLink">出題</a>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="currentUser" class="font-medium">（尚未登入）</span>
+            <button onclick="logout()" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100">登出</button>
+        </div>
 
     <ul id="problemList"></ul>
 
