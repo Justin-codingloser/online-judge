@@ -8,7 +8,7 @@ router.get("/:userId", async (req, res) => {
         const submissions = await Submission.find({ userId: req.params.userId }).sort({ submittedAt: -1 });
         res.json(submissions);
     } catch (err) {
-        res.status(500).send("❌ 查詢失敗");
+        res.status(500).json({ error: "查詢失敗" });
     }
 });
 

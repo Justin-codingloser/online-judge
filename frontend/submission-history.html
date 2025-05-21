@@ -14,7 +14,7 @@
 
     <script>
         const user = JSON.parse(localStorage.getItem("user"));
-        if (!user || !user.username) {
+        if (!user || !user.username || !user._id) {
             alert("請先登入！");
             window.location.href = "login.html";
         }
@@ -28,20 +28,28 @@
         }
 
         async function loadSubmissions() {
-            const res = await fetch(`https://online-judge-ospk.onrender.com/api/submissions/${user._id}`);
-            const submissions = await res.json();
+            try {
+                const res = await fetch(`https://online-judge-ospk.onrender.com/api/submissions/${user._id}`);
+                if (!res.ok) {
+                    throw new Error("查詢失敗");
+                }
+                const submissions = await res.json();
 
-            const list = document.getElementById("submissionList");
-            submissions.forEach(sub => {
-                const li = document.createElement("li");
-                li.innerHTML = `
-                    🧩 題目：<strong>${sub.problemTitle}</strong><br>
-                    🕒 時間：${new Date(sub.submittedAt).toLocaleString()}<br>
-                    ✅ 結果：${sub.passedAll ? "全部通過 ✔️" : "未通過 ❌"}<br>
-                    💻 程式碼：<pre>${sub.code}</pre><hr>
-                `;
-                list.appendChild(li);
-            });
+                const list = document.getElementById("submissionList");
+                list.innerHTML = ""; // 清空
+                submissions.forEach(sub => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        🧩 題目：<strong>${sub.problemTitle}</strong><br>
+                        🕒 時間：${new Date(sub.submittedAt).toLocaleString()}<br>
+                        ✅ 結果：${sub.passedAll ? "全部通過 ✔️" : "未通過 ❌"}<br>
+                        💻 程式碼：<pre>${sub.code}</pre><hr>
+                    `;
+                    list.appendChild(li);
+                });
+            } catch (err) {
+                alert("查詢失敗，請重新整理或稍後再試！");
+            }
         }
 
         loadSubmissions();
