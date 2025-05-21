@@ -30,7 +30,8 @@ router.post("/login", async (req, res) => {
             message: "✅ 登入成功（模擬 token）",
             token: "mock-token", 
             username: user.username, // 回傳 username
-            isAdmin: user.isAdmin // 回傳 isAdmin
+            isAdmin: user.isAdmin,   // 回傳 isAdmin
+            _id: user._id            // 回傳使用者ID
         });
     } catch (err) {
         res.status(500).send("❌ 登入錯誤");
