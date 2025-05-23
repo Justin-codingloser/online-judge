@@ -7,9 +7,10 @@ const problemRoutes = require("../routes/problem");
 const submitRoutes = require("../routes/submit");
 const submissionRoutes = require("../routes/submission");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 3000; // 🚀 支援 Render 的自動 PORT
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
