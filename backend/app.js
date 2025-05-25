@@ -7,10 +7,18 @@ const problemRoutes = require("../routes/problem");
 const submitRoutes = require("../routes/submit");
 const submissionRoutes = require("../routes/submission");
 const path = require("path");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// 定義 submitLimiter（要放在 app.use("/api/submit", ...) 之前）
+const submitLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 分鐘
+  max: 20,             // 最多 20 次
+  message: "UR hacking me, right?  :))",
+});
 
 // Middlewares
 app.use(cors());
@@ -18,7 +26,8 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.use("/api/auth", authRoutes);
 app.use("/api/problems", problemRoutes);
-app.use("/api/submit", submitRoutes);
+// 這裡套用 submitLimiter
+app.use("/api/submit", submitLimiter, submitRoutes);
 app.use("/api/submissions", submissionRoutes);
 
 // ✅ MongoDB 連接（改為讀取環境變數）
