@@ -2,16 +2,16 @@
 FROM ubuntu:latest
 
 # 安裝必要工具
-RUN apt-get update && apt-get install -y g++ && apt-get clean
+RUN apt-get update && apt-get install -y g++ build-essential && apt-get clean
 
 # 設定工作目錄
-WORKDIR /app
+WORKDIR /app/submissions
 
 # 複製程式碼與腳本到容器
-COPY . /app
+COPY submissions /app/submissions
 
 # 確保腳本有執行權限
-RUN chmod +x /app/run_code.sh
+RUN chmod +x /app/submissions/run_code.sh
 
 # 預設執行指令
 CMD ["bash"]
