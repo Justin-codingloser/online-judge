@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Problem = require("../models/Problem");
-const { spawn } = require("child_process");
+const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
@@ -22,63 +22,42 @@ router.post("/:problemId", async (req, res) => {
             const input = testcase.input;
             const expectedOutput = testcase.output.trim();
 
-            // 處理 C++ 程式碼
-            const filename = `code_${uuidv4()}.cpp`;
-            const filepath = path.join(__dirname, "..", "submissions", filename);
-            fs.writeFileSync(filepath, code);
+            // 將程式碼與測資寫入檔案
+            const codePath = path.join(__dirname, "..", "submissions", "code.cpp");
+            const inputPath = path.join(__dirname, "..", "submissions", "input.txt");
+            fs.writeFileSync(codePath, code);
+            console.log("Code written to:", codePath);
 
-            // 編譯
-            const exePath = filepath.replace(".cpp", ".exe");
-            const compileProcess = spawn("g++", [filepath, "-o", exePath]);
-            await new Promise((resolve, reject) => {
-                compileProcess.on("close", (code) => {
-                    if (code !== 0) reject("C++ 編譯失敗");
-                    else resolve();
+            fs.writeFileSync(inputPath, input);
+            console.log("Input written to:", inputPath);
+
+            // 使用 Docker 執行程式碼
+            const dockerCommand = `
+                docker run --rm -v ${path.join(__dirname, "..", "submissions")}:/app online-judge /bin/bash -c "cd /app && ./run_code.sh"
+            `;
+            try {
+                execSync(dockerCommand);
+                const output = fs.readFileSync(path.join(__dirname, "..", "submissions", "output.txt"), "utf-8").trim();
+
+                const passed = output === expectedOutput;
+                if (!passed) passedAll = false;
+
+                results.push({
+                    input,
+                    expectedOutput,
+                    userOutput: output,
+                    passed
                 });
-            });
-
-            // 執行
-            const run = spawn(exePath);
-
-            // 將測資 input 寫入 stdin
-            run.stdin.write(input);
-            run.stdin.end();
-
-            // 接收程式輸出
-            const output = await new Promise((resolve, reject) => {
-                let result = "";
-                let error = "";
-
-                run.stdout.on("data", (data) => {
-                    result += data;
+            } catch (err) {
+                console.error("Docker 執行失敗：", err);
+                passedAll = false;
+                results.push({
+                    input,
+                    expectedOutput,
+                    userOutput: null,
+                    passed: false
                 });
-
-                run.stderr.on("data", (err) => {
-                    error += err;
-                });
-
-                run.on("close", () => {
-                    if (error) {
-                        reject("執行錯誤：" + error);
-                    } else {
-                        resolve(result.trim());
-                    }
-                });
-            });
-
-            const passed = output === expectedOutput;
-            if (!passed) passedAll = false;
-
-            results.push({
-                input,
-                expectedOutput,
-                userOutput: output,
-                passed
-            });
-
-            // 刪除暫存檔案
-            fs.unlinkSync(filepath);
-            if (fs.existsSync(exePath)) fs.unlinkSync(exePath);
+            }
         }
 
         const Submission = require("../models/Submission");
