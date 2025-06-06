@@ -13,6 +13,8 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set("trust proxy", true);
+
 // 定義 submitLimiter（要放在 app.use("/api/submit", ...) 之前）
 const submitLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 分鐘
