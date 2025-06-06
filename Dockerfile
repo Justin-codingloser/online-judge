@@ -1,8 +1,11 @@
-# 使用官方的 C++ 編譯器映像檔
-FROM gcc:latest
+# 使用官方的 Node.js 映像檔
+FROM node:latest
 
 # 設定工作目錄
 WORKDIR /app
+
+# 安裝 GCC
+RUN apt-get update && apt-get install -y gcc g++
 
 # 複製必要的檔案到容器中
 COPY backend /app/backend
@@ -12,9 +15,6 @@ COPY submissions /app/submissions
 COPY frontend /app/frontend
 COPY package.json /app/package.json
 COPY .env /app/.env
-
-# 安裝必要的 Node.js 依賴項
-RUN apt-get update && apt-get install -y nodejs npm
 
 # 安裝專案依賴項
 RUN npm install
