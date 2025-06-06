@@ -1,7 +1,6 @@
 # Hi! this is a README.MD
 
 ## Enviroment
-
   1.Download all things in a file(maybe you can call it online-judge, and I'll use online-judge for it's name)
   2.Open your PowerShell, make sure your at online-judge file and type
   ```
@@ -18,5 +17,5 @@
 ## How to use this online judge
   1. I have to tell you something that this OJ is only for C++, because NO REASON :)) 
   2. If you need administrator privileges, please send me a private message and tell me your account and password.
-  3.I’m just a NEW HAND, don’t blame me too much:)
+  3. I’m just a NEW HAND, don’t blame me too much:)
 
