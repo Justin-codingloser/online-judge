@@ -1,8 +1,8 @@
 # Hi! this is a README.MD
 
 ## Enviroment
-  1.Download all things in a file(maybe you can call it online-judge, and I'll use online-judge for it's name)
-  2.Open your PowerShell, make sure your at online-judge file and type
+  1. Download all things in a file(maybe you can call it online-judge, and I'll use online-judge for it's name)
+  2. Open your PowerShell, make sure your at online-judge file and type
   ```
   docker build -it online-judge .
   ```
@@ -10,7 +10,10 @@
   ```
   docker run -t online-judge
   ```
-     and you’ll see something like http://localhost:3000, open it.
+
+  and you’ll see something like 
+  http://localhost:3000
+  open it.
 ### CONGRATULATIONS you’ve done the setting up of the environment.
 
 
