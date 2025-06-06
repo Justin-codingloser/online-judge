@@ -44,7 +44,7 @@
 
         // ✅ 載入題目 + 只加上刪除按鈕
         async function loadProblems() {
-            const res = await fetch("https://online-judge-ospk.onrender.com/api/problems/list");
+            const res = await fetch("http://localhost:3000/api/problems/list");
             const problems = await res.json();
 
             const list = document.getElementById("problemList");
@@ -65,7 +65,7 @@
                     deleteBtn.className = "ml-4 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition";
                     deleteBtn.onclick = async () => {
                         if (confirm("確定刪除？")) {
-                            const delRes = await fetch(`https://online-judge-ospk.onrender.com/api/problems/${p._id}`, {
+                            const delRes = await fetch(`http://localhost:3000/api/problems/${p._id}`, {
                                 method: "DELETE"
                             });
                             if (delRes.ok) {

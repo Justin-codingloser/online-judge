@@ -69,7 +69,7 @@
 
         // 題目資料載入
         async function loadProblem() {
-            const res = await fetch(`https://online-judge-ospk.onrender.com/api/problems/${problemId}`);
+            const res = await fetch(`http://localhost:3000/api/problems/${problemId}`);
             const data = await res.json();
             document.getElementById("problemTitle").innerText = data.title;
             document.getElementById("problemDescription").innerText = data.description;
@@ -95,7 +95,7 @@
             const code = document.getElementById("code").value;
             const resultMsg = document.getElementById("resultMsg");
 
-            const res = await fetch(`https://online-judge-ospk.onrender.com/api/submit/${problemId}`, {
+            const res = await fetch(`http://localhost:3000/api/submit/${problemId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -28,7 +28,6 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.use("/api/auth", authRoutes);
 app.use("/api/problems", problemRoutes);
-// 這裡套用 submitLimiter
 app.use("/api/submit", submitLimiter, submitRoutes);
 app.use("/api/submissions", submissionRoutes);
 
@@ -50,9 +49,13 @@ app.get("/api/hello", (req, res) => {
     res.send("👋 Hello from backend");
 });
 
+// 將 index.js 的功能整合到這裡
+app.use("/api/submit", require("../routes/submit"));
+
+// 預設路由
 app.get("/", (req, res) => {
     res.redirect("/login.html");
-  });
+});
 
 // 啟動伺服器
 app.listen(PORT, () => {

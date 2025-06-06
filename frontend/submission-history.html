@@ -47,7 +47,7 @@
 
         async function loadSubmissions() {
             try {
-                const res = await fetch(`https://online-judge-ospk.onrender.com/api/submissions/${user._id}`);
+                const res = await fetch(`http://localhost:3000/api/submissions/${user._id}`);
                 if (!res.ok) {
                     throw new Error("查詢失敗");
                 }
