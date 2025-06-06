@@ -7,7 +7,6 @@
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen">
 
-    <!-- 導覽列 -->
     <nav class="bg-blue-600 text-white px-6 py-3 flex justify-between items-center shadow-md">
         <div class="text-xl font-bold">
             <a href="problems.html" class="hover:underline">C++ Only Online Judge</a>
@@ -24,7 +23,6 @@
         </div>
     </nav>
 
-    <!-- 主區塊 -->
     <main class="max-w-3xl mx-auto p-6 bg-white mt-6 rounded shadow">
         <h1 class="text-2xl font-bold mb-4" id="problemTitle">題目標題載入中...</h1>
         <p id="problemDescription" class="mb-4 whitespace-pre-line text-gray-700">題目內容載入中...</p>
@@ -58,16 +56,13 @@
             window.location.href = "login.html";
         }
 
-        // 顯示登入帳號
         document.getElementById("currentUser").innerText = user.username;
 
-        // 只有 admin 才顯示「出題」連結
         if (!user.isAdmin) {
             document.getElementById("adminLink1").style.display = "none";
             document.getElementById("adminLink2").style.display = "none";
         }
 
-        // 題目資料載入
         async function loadProblem() {
             const res = await fetch(`http://localhost:3000/api/problems/${problemId}`);
             const data = await res.json();
@@ -81,14 +76,12 @@
 
         loadProblem();
 
-        // 登出功能
         function logout() {
             localStorage.removeItem("user");
             alert("您已登出");
             window.location.href = "login.html";
         }
 
-        // 提交功能
         document.getElementById("submitForm").addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -117,7 +110,10 @@
             if (res.ok) {
                 resultMsg.innerText = "提交成功！";
                 resultMsg.className = "text-green-600 text-center mt-2 text-sm";
-                window.location.href = "submission-history.html";
+
+                setTimeout(() => {
+                    window.location.href = "submission-history.html";
+                }, 1000);
             } else {
                 resultMsg.innerText = "提交失敗：" + (result.error || "請再試一次");
                 resultMsg.className = "text-red-600 text-center mt-2 text-sm";

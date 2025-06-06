@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 
-// 註冊
+
 router.post("/register", async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -17,7 +17,6 @@ router.post("/register", async (req, res) => {
     }
 });
 
-// 登入
 router.post("/login", async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -29,12 +28,12 @@ router.post("/login", async (req, res) => {
             success: true,
             message: "登入成功",
             token: "mock-token", 
-            username: user.username, // 回傳 username
-            isAdmin: user.isAdmin,   // 回傳 isAdmin
-            _id: user._id            // 回傳使用者ID
+            username: user.username,
+            isAdmin: user.isAdmin,
+            _id: user._id 
         });
     } catch (err) {
-        res.status(500).send("❌ 登入錯誤");
+        res.status(500).send("登入錯誤");
     }
 });
 

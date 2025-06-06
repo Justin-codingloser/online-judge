@@ -7,7 +7,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- 導覽列 -->
     <nav class="bg-blue-600 text-white px-6 py-3 flex justify-between items-center shadow-md">
         <div class="text-xl font-bold">
             <a href="problems.html" class="hover:underline">C++ Only Online Judge</a>
@@ -24,7 +23,6 @@
         </div>
     </nav>
 
-    <!-- 主內容 -->
     <main class="max-w-4xl mx-auto mt-10 px-4">
         <h1 class="text-2xl font-bold mb-4">題目列表</h1>
         <ul id="problemList" class="space-y-3"></ul>
@@ -52,17 +50,14 @@
 
         loadProblems();
 
-        // 顯示登入使用者名稱
         const user = JSON.parse(localStorage.getItem("user"));
         if (user && user.username) {
             document.getElementById("currentUser").innerText = user.username;
-            // 只有 admin 才顯示「出題」連結
             if (user.isAdmin!=true) {
                 document.getElementById("adminLink1").style.display = "none";
                 document.getElementById("adminLink2").style.display = "none";
             }
         } else {
-            // 未登入也隱藏「出題」連結
             document.getElementById("adminLink").style.display = "none";
         }
 

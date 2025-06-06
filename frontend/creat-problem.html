@@ -34,7 +34,7 @@
     <ul id="problemList"></ul>
 
     <script>
-        // ✅ 登入驗證
+        //登入驗證
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.username) {
             alert("請先登入");
@@ -42,20 +42,20 @@
         }
         document.getElementById("currentUser").innerText = user.username;
 
-        // ✅ 權限檢查
+        //權限
         if (user.isAdmin!== true) {
             document.getElementById("adminOnly").style.display = "none";
             document.getElementById("message").innerText = "⚠️ 你沒有出題權限，只能瀏覽題目";
         }
 
-        // ✅ 登出功能
+        //登出
         function logout() {
             localStorage.removeItem("user");
             alert("您已登出");
             window.location.href = "login.html";
         }
 
-        // ✅ 題目上傳
+        //題目上傳
         document.getElementById("problemForm")?.addEventListener("submit", async function (e) {
             e.preventDefault();
 
@@ -79,20 +79,19 @@
             if (res.ok) {
                 document.getElementById("message").innerText = "題目新增成功！";
                 document.getElementById("problemForm").reset();
-                loadProblems(); // 更新列表
+                loadProblems();
             } else {
                 const err = await res.text();
                 document.getElementById("message").innerText = "發生錯誤：" + err;
             }
         });
 
-        // ✅ 顯示目前所有題目
-        async function loadProblems() {
+            async function loadProblems() {
             const res = await fetch("hhttp://localhost:3000/api/problems/list");
             const problems = await res.json();
 
             const list = document.getElementById("problemList");
-            list.innerHTML = ""; // 清空
+            list.innerHTML = ""; 
             problems.forEach(p => {
                 const li = document.createElement("li");
                 const a = document.createElement("a");

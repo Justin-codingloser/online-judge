@@ -1,13 +1,9 @@
-# 使用官方的 Node.js 映像檔
 FROM node:latest
 
-# 設定工作目錄
 WORKDIR /app
 
-# 安裝 GCC
 RUN apt-get update && apt-get install -y gcc g++
 
-# 複製必要的檔案到容器中
 COPY backend /app/backend
 COPY routes /app/routes
 COPY models /app/models
@@ -16,11 +12,8 @@ COPY frontend /app/frontend
 COPY package.json /app/package.json
 COPY .env /app/.env
 
-# 安裝專案依賴項
 RUN npm install
 
-# 暴露伺服器埠
 EXPOSE 3000
 
-# 啟動應用程式
 CMD ["node", "./backend/app.js"]

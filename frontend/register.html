@@ -49,7 +49,6 @@
             const msg = document.getElementById("message");
 
             try {
-                // 確保只有 JSON 格式的回應才解析
                 const result = res.headers.get("Content-Type")?.includes("application/json")
                     ? await res.json()
                     : null;

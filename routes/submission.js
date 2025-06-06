@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Submission = require("../models/Submission");
 
-// GET /api/submissions/:userId
 router.get("/:userId", async (req, res) => {
     try {
         const submissions = await Submission.find({ userId: req.params.userId }).sort({ submittedAt: -1 });

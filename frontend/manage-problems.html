@@ -27,7 +27,7 @@
     <ul id="problemList"></ul>
 
     <script>
-        // ✅ 登入檢查
+        
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.username) {
             alert("請先登入");
@@ -42,7 +42,7 @@
             window.location.href = "login.html";
         }
 
-        // ✅ 載入題目 + 只加上刪除按鈕
+        
         async function loadProblems() {
             const res = await fetch("http://localhost:3000/api/problems/list");
             const problems = await res.json();
@@ -58,7 +58,6 @@
                 link.innerText = p.title;
                 li.appendChild(link);
 
-                // 只有 admin 能看到刪除按鈕
                 if (user.isAdmin) {
                     const deleteBtn = document.createElement("button");
                     deleteBtn.innerText = "刪除";

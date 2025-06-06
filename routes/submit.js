@@ -6,9 +6,8 @@ const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 
-// POST /api/submit/:problemId
 router.post("/:problemId", async (req, res) => {
-    const { code } = req.body; // 只需要程式碼
+    const { code } = req.body;
     const { problemId } = req.params;
 
     try {
@@ -22,12 +21,10 @@ router.post("/:problemId", async (req, res) => {
             const input = testcase.input;
             const expectedOutput = testcase.output.trim();
 
-            // 處理 C++ 程式碼
             const filename = `code_${uuidv4()}.cpp`;
             const filepath = path.join(__dirname, "..", "submissions", filename);
             fs.writeFileSync(filepath, code);
 
-            // 編譯
             const exePath = filepath.replace(".cpp", ".exe");
             const compileProcess = spawn("g++", [filepath, "-o", exePath]);
             await new Promise((resolve, reject) => {
@@ -37,14 +34,11 @@ router.post("/:problemId", async (req, res) => {
                 });
             });
 
-            // 執行
             const run = spawn(exePath);
 
-            // 將測資 input 寫入 stdin
             run.stdin.write(input);
             run.stdin.end();
 
-            // 接收程式輸出
             const output = await new Promise((resolve, reject) => {
                 let result = "";
                 let error = "";
@@ -76,18 +70,15 @@ router.post("/:problemId", async (req, res) => {
                 passed
             });
 
-            // 刪除暫存檔案
             fs.unlinkSync(filepath);
             if (fs.existsSync(exePath)) fs.unlinkSync(exePath);
         }
 
         const Submission = require("../models/Submission");
 
-        // 取得使用者資訊（從前端傳入）
         const username = req.body.username || "unknown";
         const userId = req.body.userId || null;
 
-        // 儲存紀錄
         await Submission.create({
             userId,
             username,
