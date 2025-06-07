@@ -8,7 +8,7 @@
   ```
   3.After you done the building, type
   ```
-  docker run -t online-judge
+  docker run -it -p 3000:3000 online-judge
   ```
 
   and you’ll see something like 
